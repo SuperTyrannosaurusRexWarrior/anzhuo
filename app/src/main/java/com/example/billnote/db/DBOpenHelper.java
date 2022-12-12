@@ -18,6 +18,8 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onCreate ( SQLiteDatabase sqLiteDatabase ) {
 
+		//每个表的数据自己写点
+
 		sqLiteDatabase.execSQL ( "PRAGMA foreign_keys = ON;" );
 
 		//通过 user 函数创建表
@@ -29,7 +31,6 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 				"`regdate` date(20) not null);");                               //注册时间
 		sqLiteDatabase.execSQL ( "insert into user values('1','test','123456','张三','2022\12\12','成都高新区')" );
 
-
 		sqLiteDatabase.execSQL ( "CREATE TABLE 'category' (" +
 				" 'cid' INTEGER(10) NOT NULL PRIMARY KEY AUTOINCREMENT," +      //ID
 				"'cname' varchar(20) not null);" );                             //分类名称
@@ -39,8 +40,18 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 		sqLiteDatabase.execSQL ( "INSERT INTO `category` VALUES(null,'交通')" );
 		sqLiteDatabase.execSQL ( "INSERT INTO `category` VALUES(null,'采购')" );
 
+		sqLiteDatabase.execSQL ( "CREATE TABLE 'category_user' (" +
+				" 'cid' INTEGER(10) NOT NULL," +      //ID
+				"'uid' INTEGER(20) not null," +
+				"FOREIGN KEY(uid) REFERENCES user(uid) ON UPDATE CASCADE ON DELETE CASCADE," +
+				"FOREIGN KEY(cid) REFERENCES category(cid) ON UPDATE CASCADE ON DELETE SET NULL" +
+				");" );                             //分类名称
+		sqLiteDatabase.execSQL ( "INSERT INTO `category` VALUES('1','1')" );
+		sqLiteDatabase.execSQL ( "INSERT INTO `category` VALUES('1','2')" );
+		sqLiteDatabase.execSQL ( "INSERT INTO `category` VALUES('1','3')" );
+		sqLiteDatabase.execSQL ( "INSERT INTO `category` VALUES('1','4')" );
 
-		//创建note管理员表
+		//创建 note
 		sqLiteDatabase.execSQL ( "CREATE TABLE `note` (" +
 				"  `nid` INTEGER(10) NOT NULL PRIMARY KEY AUTOINCREMENT," + //ID
 				"  `ntype` tintint(10) NOT NULL," +                         //类型 1-收入 0-支出
